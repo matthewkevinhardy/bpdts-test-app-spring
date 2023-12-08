@@ -8,7 +8,8 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,18 @@ public class NameFileService {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
-	@Value("classpath:names.json")
-	private Resource namesFile;
+	@Autowired
+	private ApplicationContext appContext;
+
+	// @Value("classpath:names.json")
+	// private Resource namesFile;
 
 	private List<User> users;
 
 	@PostConstruct
 	private void mapUserList() throws IOException {
+		Resource namesFile = appContext.getResource("classpath:names.json");
+
 		users = Collections.unmodifiableList(mapper.readerForListOf(User.class).readValue(namesFile.getFile()));
 		LOG.info("Found users: " + users.size());
 	}
