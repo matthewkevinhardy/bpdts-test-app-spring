@@ -1,6 +1,5 @@
 package bpdts.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -26,9 +25,10 @@ public class NameFileService {
 
 	@PostConstruct
 	private void mapUserList() throws IOException {
-		File namesFile = new ClassPathResource("names.json").getFile();
+		ClassPathResource classPathResource = new ClassPathResource("names.json");
+		String namesJson = new String(classPathResource.getInputStream().readAllBytes());
 
-		users = Collections.unmodifiableList(mapper.readerForListOf(User.class).readValue(namesFile));
+		users = Collections.unmodifiableList(mapper.readerForListOf(User.class).readValue(namesJson));
 		LOG.info("Found users: " + users.size());
 	}
 
