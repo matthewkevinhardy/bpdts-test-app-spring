@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import bpdts.model.User;
+import bpdts.utils.NameFileService;
 
 @RestController
 public class BpdtsTestAppController {
@@ -23,7 +24,7 @@ public class BpdtsTestAppController {
 	private ObjectMapper mapper = new ObjectMapper();
 
 	@Autowired
-	private List<User> userList;
+	private NameFileService nameFileService;
 
 	@GetMapping(path = "/instructions", produces = MediaType.APPLICATION_JSON_VALUE)
 	public String instructions() {
@@ -35,7 +36,7 @@ public class BpdtsTestAppController {
 
 	@GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ObjectNode> users() throws JsonProcessingException {
-		List<ObjectNode> list = userList.stream().map(u -> {
+		List<ObjectNode> list = nameFileService.getUserList().stream().map(u -> {
 			ObjectNode jsonNode = mapper.valueToTree(u);
 			jsonNode.remove("city");
 			return jsonNode;
@@ -46,14 +47,14 @@ public class BpdtsTestAppController {
 
 	@GetMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> userById(@PathVariable(value = "id") Long id) {
-		return userList.stream().filter(u -> u.getId() == id).findFirst()
+		return nameFileService.getUserList().stream().filter(u -> u.getId() == id).findFirst()
 				.map(u -> new ResponseEntity<>(u, HttpStatus.OK))
 				.orElse(new ResponseEntity<User>(HttpStatus.NOT_FOUND));
 	}
 
 	@GetMapping(path = "/city/{city}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ObjectNode> usersByCity(@PathVariable(value = "city") String city) {
-		return userList.stream().filter(u -> u.getCity().equals(city)).map(u -> {
+		return nameFileService.getUserList().stream().filter(u -> u.getCity().equals(city)).map(u -> {
 			ObjectNode jsonNode = mapper.valueToTree(u);
 			jsonNode.remove("city");
 			return jsonNode;
