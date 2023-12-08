@@ -6,15 +6,10 @@
 	<artifactId>bpdts-test-app-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.5</version>
+		<version>2.3.5.RELEASE</version>
 	</parent>
 
 	<dependencies>
@@ -36,13 +31,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<release>10</release>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
